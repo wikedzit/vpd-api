@@ -5,4 +5,4 @@ gunicorn
 h5py
 Keras
 Werkzeug
-cv2
+opencv-python
