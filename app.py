@@ -88,7 +88,8 @@ class Vpd:
         # Initialize a list which will be used to append charater image
         crop_characters = []
         # Scales, calculates absolute values, and converts the result to 8-bit.
-        plate_image = cv2.convertScaleAbs(lpimg, alpha=(255.0))
+        alph  = 500
+        plate_image = cv2.convertScaleAbs(lpimg, alpha=(alph))
         
         # convert to grayscale and blur the image
         gray = cv2.cvtColor(plate_image, cv2.COLOR_BGR2GRAY)
@@ -109,11 +110,12 @@ class Vpd:
             (x, y, w, h) = cv2.boundingRect(c)
             ratio = h/w
             if 1<=ratio<=3.5: # Only select contour with defined ratio
-                if h/plate_image.shape[0]>=0.5: # Select contour which has the height larger than 50% of the plate
+                if h/plate_image.shape[0]>=0.4: # Select contour which has the height larger than 50% of the plate
                     # Draw bounding box arroung digit number
                     cv2.rectangle(test_roi, (x, y), (x + w, y + h), (0, 255,0), 2)
                     # Sperate number and gibe prediction
-                    curr_num = thre_mor[y:y+h,x:x+w]
+                    padding = 2 # default 0
+                    curr_num = thre_mor[y-padding:y+h+padding,x-padding:x+w+padding]
                     curr_num = cv2.resize(curr_num, dsize=(digit_w, digit_h))
                     _, curr_num = cv2.threshold(curr_num, 220, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
                     crop_characters.append(curr_num)
@@ -162,7 +164,7 @@ def allowed_file(filename):
 
 # initialize our Flask application
 app = Flask(__name__)
-cors = CORS(app)
+CORS(app)
 app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
