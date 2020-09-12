@@ -1,8 +1,14 @@
+gunicorn
 Flask
 Flask-Cors
 Flask-RESTful
-gunicorn
 h5py
-Keras
 Werkzeug
 opencv-python
+numpy
+SciPy
+joblib
+threadpoolctl
+scikit-learn
+Keras
+matplotlib

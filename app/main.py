@@ -16,7 +16,7 @@ from sklearn.preprocessing import LabelEncoder
 UPLOAD_FOLDER = './app/static'
 WPOD_NET_PATH = './model/wpod-net.json'
 
-ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
 class Vpd:
     def __init__(self):
