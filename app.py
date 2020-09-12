@@ -1,12 +1,13 @@
 import os
+import glob
 import cv2
+import hashlib
+import time
 import numpy as np
 import matplotlib.pyplot as plt
 from local_utils import detect_lp
 from os.path import splitext, basename
 from keras.models import model_from_json
-import glob
-
 from keras.preprocessing.image import load_img, img_to_array
 from keras.layers import Input
 from keras.layers import *
@@ -152,7 +153,8 @@ class Vpd:
 
 detector = Vpd()
 
-from flask import Flask, flash, request, redirect, url_for
+from flask import Flask, flash, request, redirect, url_for, jsonify
+from flask_cors import CORS, cross_origin
 from werkzeug.utils import secure_filename
 
 def allowed_file(filename):
@@ -160,13 +162,12 @@ def allowed_file(filename):
 
 # initialize our Flask application
 app = Flask(__name__)
+cors = CORS(app)
+app.config['CORS_HEADERS'] = 'Content-Type'
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
-@app.route("/")
-def index():
-    return "<h1>Welcome to our server !!</h1>"
-
-@app.route("/image", methods=["GET", "POST"])
+@app.route("/", methods=["GET", "POST"])
+@cross_origin()
 def uploadImage():
     plate=""
     if request.method == 'POST':
@@ -181,17 +182,18 @@ def uploadImage():
             flash('No selected file')
             return redirect(request.url)
         if file and allowed_file(file.filename):
-            filename = secure_filename(file.filename)
+            extention = file.filename.rsplit('.', 1)[-1].lower()
+            filename  = str(time.time()) + file.filename
+            hash_object = hashlib.md5(filename.encode())
+            filename  = hash_object.hexdigest()+"."+extention
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             #After uploading the file we process it
             LpImg = detector.extractPlate('static/' + filename)
             for img in LpImg:
                 plate += detector.read_character(img)
 
-            src = url_for('static', filename=filename)
-            if plate!="":
-                plate = "<h3>DETECTED: "+plate+"</h3><img width='40%' height='40%' src='"+src+"'/>"
-            #return redirect(url_for('uploadImage',filename=filename))
+            url = request.base_url+ "static/" + filename
+            return jsonify(image_path=url, file_name=filename, plate_number=plate)
 
     return '''
     <!doctype html>
