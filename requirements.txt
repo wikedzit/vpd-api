@@ -1,4 +1,5 @@
 gunicorn
+tensorflow
 Flask
 Flask-Cors
 Flask-RESTful
