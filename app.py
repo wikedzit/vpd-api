@@ -184,7 +184,7 @@ def uploadImage():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             #After uploading the file we process it
-            LpImg = detector.extractPlate('static/' + filename)
+            LpImg = detector.extractPlate('/app/static/' + filename)
             for img in LpImg:
                 plate += detector.read_character(img)
 
@@ -204,6 +204,5 @@ def uploadImage():
     <hr />
     ''' + plate
 
-#port = int(os.environ.get('PORT', 33507))  
 if __name__ == "__main__":
     app.run(threaded=True, debug=True)
