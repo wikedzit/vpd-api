@@ -8,10 +8,8 @@ Keras==2.2.4
 matplotlib==2.1.2
 numpy==1.14.2
 pandas==0.22.0
-requests @ file:///tmp/build/80754af9/requests_1592841827918/work
 scikit-image==0.13.1
 scikit-learn==0.19.1
 scipy==1.0.0
 tensorflow==1.9.0
-Werkzeug==0.14.
-cv2
+Werkzeug
