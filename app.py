@@ -13,8 +13,8 @@ from keras.layers import *
 from keras.models import Model
 from sklearn.preprocessing import LabelEncoder
 
-UPLOAD_FOLDER = './static'
-WPOD_NET_PATH = './model/wpod-net.json'
+UPLOAD_FOLDER = 'static/'
+WPOD_NET_PATH = 'model/wpod-net.json'
 
 ALLOWED_EXTENSIONS = {'png', 'jpg', 'jpeg'}
 
@@ -121,13 +121,13 @@ class Vpd:
 
     def loadModel(self):
         # Load model architecture, weight and labels
-        json_file = open('./model/mobileNets.json', 'r')
+        json_file = open('model/mobileNets.json', 'r')
         loaded_model_json = json_file.read()
         json_file.close()
         model = model_from_json(loaded_model_json)
-        model.load_weights("./model/weight.h5")
+        model.load_weights("model/weight.h5")
         labels = LabelEncoder()
-        labels.classes_ = np.load('./model/classes.npy')
+        labels.classes_ = np.load('model/classes.npy')
         model_set=True
         return model,labels
 
@@ -184,7 +184,7 @@ def uploadImage():
             filename = secure_filename(file.filename)
             file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
             #After uploading the file we process it
-            LpImg = detector.extractPlate('./static/' + filename)
+            LpImg = detector.extractPlate('static/' + filename)
             for img in LpImg:
                 plate += detector.read_character(img)
 
