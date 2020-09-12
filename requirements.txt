@@ -4,9 +4,4 @@ Flask-RESTful
 gunicorn
 h5py
 Keras
-matplotlib
-numpy
-pandas
-scikit-image
-scikit-learn
 Werkzeug
