@@ -164,7 +164,7 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route("/")
 def index():
-    return jsonify(str("Works fine"))
+    return "<h1>Welcome to our server !!</h1>"
 
 @app.route("/image", methods=["GET", "POST"])
 def uploadImage():
