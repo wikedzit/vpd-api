@@ -172,10 +172,10 @@ def uploadImage():
     plate=""
     if request.method == 'POST':
         # check if the post request has the file part
-        if 'file' not in request.files:
+        if 'name' not in request.files:
             flash('No file part')
             return redirect(request.url)
-        file = request.files['file']
+        file = request.files['name']
         # if user does not select file, browser also
         # submit an empty part without filename
         if file.filename == '':
@@ -200,7 +200,7 @@ def uploadImage():
     <title>Upload new File</title>
     <h1>Upload new File</h1>
     <form method=post enctype=multipart/form-data>
-      <input type=file name=file>
+      <input type=file name=name>
       <input type=submit value=Upload>
     </form>
     <hr />
