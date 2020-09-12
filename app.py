@@ -203,6 +203,7 @@ def uploadImage():
     </form>
     <hr />
     ''' + plate
-    
-if __name__ == "__main__": 
-    app.run(app.run(threaded=True) 
+
+port = int(os.environ.get('PORT', 8000))  
+if __name__ == "__main__":
+    app.run(app.run(threaded=True, port=port, debug=True)
