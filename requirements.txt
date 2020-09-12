@@ -5,3 +5,4 @@ gunicorn
 h5py
 Keras
 Werkzeug
+cv2
