@@ -171,30 +171,33 @@ app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 def uploadImage():
     plate=""
     if request.method == 'POST':
-        # check if the post request has the file part
-        if 'name' not in request.files:
-            flash('No file part')
-            return redirect(request.url)
-        file = request.files['name']
-        # if user does not select file, browser also
-        # submit an empty part without filename
-        if file.filename == '':
-            flash('No selected file')
-            return redirect(request.url)
-        if file and allowed_file(file.filename):
-            extention = file.filename.rsplit('.', 1)[-1].lower()
-            filename  = str(time.time()) + file.filename
-            hash_object = hashlib.md5(filename.encode())
-            filename  = hash_object.hexdigest()+"."+extention
-            file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
-            #After uploading the file we process it
-            LpImg = detector.extractPlate('static/' + filename)
-            for img in LpImg:
-                plate += detector.read_character(img)
+        try:
+            # check if the post request has the file part
+            if 'name' not in request.files:
+                flash('No file part')
+                return redirect(request.url)
+            file = request.files['name']
+            # if user does not select file, browser also
+            # submit an empty part without filename
+            if file.filename == '':
+                flash('No selected file')
+                return redirect(request.url)
+            if file and allowed_file(file.filename):
+                extention = file.filename.rsplit('.', 1)[-1].lower()
+                filename  = str(time.time()) + file.filename
+                hash_object = hashlib.md5(filename.encode())
+                filename  = hash_object.hexdigest()+"."+extention
+                file.save(os.path.join(app.config['UPLOAD_FOLDER'], filename))
+                #After uploading the file we process it
+                LpImg = detector.extractPlate('static/' + filename)
+                for img in LpImg:
+                    plate += detector.read_character(img)
 
-            url = request.base_url+ "static/" + filename
-            return jsonify(image_path=url, file_name=filename, plate_number=plate)
-
+                url = request.base_url+ "static/" + filename
+                return jsonify(image_path=url, file_name=filename, plate_number=plate)
+        except:
+            return jsonify(error='An error has occurred')
+        
     return '''
     <!doctype html>
     <title>Upload new File</title>
